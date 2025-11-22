@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .page-title {
+        color: #28a745;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .product-title {
+        color: #28a745;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .section-title {
+        color: #28a745;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .price-tag {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .content-box {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .btn-finalizar {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .btn-finalizar:hover {
+        background-color: #218838;
+        color: white;
+    }
+
+    .form-control {
+        border: 1px solid #ced4da;
+        padding: 10px;
+    }
+</style>
+
+<div class="container py-5">
+    <!-- Título Principal -->
+    <h2 class="page-title">Finalizar Pedido</h2>
+
+    <div class="row g-4">
+        <!-- Coluna Esquerda: Detalhes do Produto -->
+        <div class="col-md-6">
+            <div class="content-box">
+                <h4 class="product-title">{{ produto.nome }}</h4>
+                
+                <div class="text-center mb-3">
+                    {% if produto.foto %}
+                        <img src="{{ produto.foto.url }}" class="img-fluid rounded" alt="{{ produto.nome }}" style="max-height: 250px;">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px;">
+                            <span class="text-muted">Sem imagem</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <p class="mb-2"><strong>Descrição:</strong> {{ produto.descricao }}</p>
+                <p class="price-tag mt-3">Preço unitário: R$ {{ produto.preco }}</p>
+            </div>
+        </div>
+
+        <!-- Coluna Direita: Formulário de Compra -->
+        <div class="col-md-6">
+            <div class="content-box">
+                <h4 class="section-title">Quantidade</h4>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Exibição de Erros (Estilo Alerta Vermelho igual ao print) -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>{{ message }}</div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="quantidade" class="form-label text-muted">Quantidade:</label>
+                        <input type="number" name="quantidade" id="quantidade" class="form-control" min="1" max="{{ produto.estoque }}" value="1">
+                        <div class="form-text text-muted small">Estoque disponível: {{ produto.estoque }}</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-finalizar">Finalizar Pedido</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

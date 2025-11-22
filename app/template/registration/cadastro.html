@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Fundo levemente cinza para destacar o card branco */
+    body {
+        background-color: #f8f9fa;
+    }
+    
+    .cadastro-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    
+    .cadastro-header {
+        background-color: white;
+        padding: 30px 20px 10px 20px;
+        text-align: center;
+    }
+
+    .btn-cadastro {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 6px;
+        border: none;
+        transition: background 0.3s;
+    }
+    .btn-cadastro:hover {
+        background-color: #218838;
+        color: white;
+    }
+
+    /* Estilização da lista de ajuda de senha do Django */
+    .helptext {
+        display: block;
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+    
+    ul {
+        padding-left: 20px;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            
+            <div class="card cadastro-card">
+                <div class="cadastro-header">
+                    <h3 class="fw-bold text-success">Cadastro de Usuário</h3>
+                    <p class="text-muted small">Preencha os dados abaixo para criar sua conta</p>
+                </div>
+                
+                <div class="card-body p-4 pt-2">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger small">
+                                Por favor, corrija os erros abaixo.
+                            </div>
+                        {% endif %}
+
+                        <!-- Renderização manual dos campos para controle total -->
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-secondary">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text helptext">{{ field.help_text|safe }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-cadastro">Cadastrar</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-footer bg-white text-center py-3 border-0">
+                    <p class="mb-0 small">
+                        Já tem conta? <a href="{% url 'login' %}" class="text-success fw-bold text-decoration-none">Faça login</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
