@@ -48,13 +48,13 @@ COPY --from=build /usr/src/app .
 # Set the virtual environment as the active Python environment
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Create a non-root user to run the application
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /usr/src/app
-# USER appuser
+# --- MUDANÇA PRINCIPAL: Usar ROOT para permitir escrita no Volume ---
+USER root
 
-# Expose the port your app runs on
-ENV PORT=8080
-EXPOSE $PORT
+# Expose the port your app runs on (Ajustado para 8000)
+ENV PORT=8000
+EXPOSE 8000
 
 # Run database migrations and start the application
-CMD python manage.py migrate && gunicorn --bind 0.0.0.0:$PORT --workers 4 --threads 2 --timeout 120 Projeto.wsgi:application
+# O comando abaixo tenta rodar a migração e depois sobe o servidor
+CMD sh -c "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 --workers 2 --threads 2 --timeout 120 Projeto.wsgi:application"
