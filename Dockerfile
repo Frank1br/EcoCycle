@@ -57,4 +57,4 @@ EXPOSE 8000
 
 # Run database migrations and start the applicati
 # Mantém o container vivo sem rodar nada, para podermos entrar via SSH
-CMD ["tail", "-f", "/dev/null"]
+CMD sh -c "/opt/venv/bin/python manage.py migrate && /opt/venv/bin/gunicorn --bind 0.0.0.0:8000 --workers 2 --threads 2 --timeout 120 Projeto.wsgi:application"
