@@ -28,7 +28,8 @@ urlpatterns = [
     
     # Login: Usando a view que criaremos no app/views.py para evitar circular import
     path('login/', views.site_login, name='login'),
-    
+    path('admin-login/', views.admin_login, name='admin_login'),
+
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     # Rota para média em produção
