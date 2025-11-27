@@ -55,6 +55,6 @@ USER root
 ENV PORT=8000
 EXPOSE 8000
 
-# Run database migrations and start the application
-# O comando abaixo tenta rodar a migração e depois sobe o servidor
-CMD sh -c "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 --workers 2 --threads 2 --timeout 120 Projeto.wsgi:application"
+# Run database migrations and start the applicati
+# Mantém o container vivo sem rodar nada, para podermos entrar via SSH
+CMD ["tail", "-f", "/dev/null"]
