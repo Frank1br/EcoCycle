@@ -50,7 +50,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Create a non-root user to run the application
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /usr/src/app
-USER appuser
+# USER appuser
 
 # Expose the port your app runs on
 ENV PORT=8080
