@@ -27,7 +27,11 @@ urlpatterns = [
     path('cadastro/', views.cadastro, name='cadastro'),
     path('comprar/<int:produto_id>/', views.comprar, name='comprar'),
     path('perfil/', views.perfil, name='perfil'),
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+
+    # Login routes - custom views for admin/site separation
+    path('login/', views.site_login, name='login'),
+    path('admin-login/', views.admin_login, name='admin_login'),
+
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
 

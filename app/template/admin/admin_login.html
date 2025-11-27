@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     /* ============================================
-       ESTILOS ESPECÍFICOS DO LOGIN
+       ESTILOS ESPECÍFICOS DO LOGIN ADMIN
        ============================================ */
 
     /* Container de Centralização */
@@ -26,29 +26,13 @@
         width: 100%;
     }
 
-    /* Header do Card */
+    /* Header do Card - Tema Admin (Vermelho/Laranja) */
     .auth-header {
-        background: linear-gradient(135deg, var(--primary-dark) 0%, #1E293B 100%);
+        background: linear-gradient(135deg, #DC2626 0%, #EA580C 100%);
         color: var(--white);
         padding: 2.5rem 2rem 2rem;
         text-align: center;
         position: relative;
-    }
-
-    .auth-header::after {
-        content: '';
-        position: absolute;
-        bottom: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 60px;
-        background: var(--primary-green);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
     }
 
     .auth-icon {
@@ -58,12 +42,12 @@
         transform: translateX(-50%);
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
         z-index: 2;
     }
 
@@ -81,8 +65,21 @@
 
     .auth-subtitle {
         font-size: 0.95rem;
-        color: #CBD5E1;
+        color: #FEE2E2;
         margin: 0;
+    }
+
+    /* Badge Admin */
+    .admin-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
     }
 
     /* Body do Card */
@@ -114,8 +111,8 @@
     }
 
     .form-control:focus {
-        border-color: var(--primary-green);
-        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.15);
+        border-color: #EF4444;
+        box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.15);
         background: var(--white);
         outline: none;
     }
@@ -143,9 +140,9 @@
         padding-left: 2.75rem;
     }
 
-    /* Botão de Login */
+    /* Botão de Login Admin */
     .btn-auth {
-        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        background: linear-gradient(135deg, #DC2626 0%, #EA580C 100%);
         color: var(--white);
         font-weight: 700;
         font-size: 1rem;
@@ -154,15 +151,15 @@
         border-radius: var(--radius-sm);
         width: 100%;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .btn-auth:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        background: linear-gradient(135deg, var(--primary-green-hover) 0%, #047857 100%);
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        background: linear-gradient(135deg, #B91C1C 0%, #C2410C 100%);
     }
 
     .btn-auth:active {
@@ -204,38 +201,15 @@
     }
 
     .auth-link {
-        color: var(--primary-green);
+        color: #DC2626;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.3s ease;
     }
 
     .auth-link:hover {
-        color: var(--primary-green-hover);
+        color: #B91C1C;
         text-decoration: underline;
-    }
-
-    /* Divider */
-    .divider {
-        display: flex;
-        align-items: center;
-        text-align: center;
-        margin: 1.5rem 0;
-    }
-
-    .divider::before,
-    .divider::after {
-        content: '';
-        flex: 1;
-        border-bottom: 1px solid var(--border-light);
-    }
-
-    .divider span {
-        padding: 0 1rem;
-        color: var(--text-light);
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
     }
 
     /* Password Toggle */
@@ -254,36 +228,7 @@
     }
 
     .password-toggle:hover {
-        color: var(--primary-green);
-    }
-
-    /* Botão Admin Link */
-    .btn-admin-link {
-        display: block;
-        text-align: center;
-        background: linear-gradient(135deg, #64748B 0%, #475569 100%);
-        color: var(--white);
-        font-weight: 600;
-        font-size: 0.9rem;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: var(--radius-sm);
-        width: 100%;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
-    }
-
-    .btn-admin-link:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(100, 116, 139, 0.4);
-        background: linear-gradient(135deg, #475569 0%, #334155 100%);
-        color: var(--white);
-        text-decoration: none;
-    }
-
-    .btn-admin-link:active {
-        transform: translateY(0);
+        color: #DC2626;
     }
 
     /* Responsividade */
@@ -314,25 +259,34 @@
     <div class="auth-card">
         <!-- Header -->
         <div class="auth-header">
-            <h1 class="auth-title">Bem-vindo de Volta</h1>
-            <p class="auth-subtitle">Acesse sua conta para continuar</p>
+            <h1 class="auth-title">Painel Administrativo</h1>
+            <p class="auth-subtitle">Acesso restrito para administradores</p>
+            <div class="admin-badge">
+                <i class="bi bi-shield-fill-check"></i>
+                <span>Área Admin</span>
+            </div>
             <div class="auth-icon">
-                <i class="bi bi-person-circle"></i>
+                <i class="bi bi-shield-lock-fill"></i>
             </div>
         </div>
 
         <!-- Body -->
         <div class="auth-body">
-            <form method="post" id="loginForm">
+            <form method="post" id="adminLoginForm">
                 {% csrf_token %}
 
                 <!-- Mensagem de Erro -->
-                {% if form.errors %}
+                {% if form.errors or messages %}
                 <div class="alert-auth">
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     <div>
                         <strong>Erro ao fazer login</strong><br>
-                        Usuário ou senha incorretos. Tente novamente.
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                        {% if form.errors and not messages %}
+                            Usuário ou senha incorretos, ou você não tem permissão de administrador.
+                        {% endif %}
                     </div>
                 </div>
                 {% endif %}
@@ -340,7 +294,7 @@
                 <!-- Campo Usuário -->
                 <div class="form-group">
                     <label for="{{ form.username.id_for_label }}" class="form-label">
-                        <i class="bi bi-person me-2"></i>Usuário
+                        <i class="bi bi-person me-2"></i>Usuário Admin
                     </label>
                     <div class="input-group">
                         <i class="bi bi-person-fill input-icon"></i>
@@ -349,7 +303,7 @@
                             name="{{ form.username.name }}"
                             id="{{ form.username.id_for_label }}"
                             class="form-control"
-                            placeholder="Digite seu usuário"
+                            placeholder="Digite seu usuário administrativo"
                             autocomplete="username"
                             required
                             autofocus>
@@ -359,7 +313,7 @@
                 <!-- Campo Senha -->
                 <div class="form-group">
                     <label for="{{ form.password.id_for_label }}" class="form-label">
-                        <i class="bi bi-lock me-2"></i>Senha
+                        <i class="bi bi-lock me-2"></i>Senha Admin
                     </label>
                     <div class="input-group">
                         <i class="bi bi-lock-fill input-icon"></i>
@@ -377,30 +331,19 @@
                     </div>
                 </div>
 
-                <!-- Botão de Login -->
+                <!-- Botão de Login Admin -->
                 <button type="submit" class="btn-auth">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>
-                    Entrar
-                </button>
-
-                <!-- Divider -->
-                <div class="divider">
-                    <span>ou</span>
-                </div>
-
-                <!-- Botão Admin -->
-                <a href="{% url 'admin_login' %}" class="btn-admin-link">
                     <i class="bi bi-shield-lock-fill me-2"></i>
-                    É admin? Clique aqui
-                </a>
+                    Entrar como Admin
+                </button>
             </form>
         </div>
 
         <!-- Footer -->
         <div class="auth-footer">
             <p>
-                Não tem uma conta?
-                <a href="{% url 'cadastro' %}" class="auth-link">Cadastre-se gratuitamente</a>
+                <i class="bi bi-arrow-left me-2"></i>
+                <a href="{% url 'login' %}" class="auth-link">Voltar para login do site</a>
             </p>
         </div>
     </div>
@@ -424,9 +367,9 @@
     }
 
     // Adiciona animação de loading ao submeter
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
         const button = this.querySelector('.btn-auth');
-        button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Entrando...';
+        button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Autenticando...';
         button.disabled = true;
     });
 </script>

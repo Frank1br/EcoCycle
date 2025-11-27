@@ -1,35 +1,508 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-5">
-    <h2 class="text-success mb-4">Minha Conta</h2>
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-light">
-            <h5 class="mb-0">Histórico de Pedidos</h5>
+<style>
+    /* ============================================
+       ESTILOS ESPECÍFICOS DO PERFIL/DASHBOARD
+       ============================================ */
+
+    /* Container Principal */
+    .profile-container {
+        padding: 3rem 0;
+    }
+
+    /* Header do Dashboard */
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #1E293B 100%);
+        color: var(--white);
+        padding: 2.5rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 2.5rem;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 35px,
+            rgba(16, 185, 129, 0.05) 35px,
+            rgba(16, 185, 129, 0.05) 70px
+        );
+    }
+
+    .dashboard-header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .welcome-badge {
+        display: inline-block;
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--primary-green);
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+        border: 2px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .user-name {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .user-name i {
+        font-size: 3rem;
+        color: var(--primary-green);
+    }
+
+    .user-info {
+        font-size: 1rem;
+        color: #CBD5E1;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 1.75rem;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: var(--white);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-dark);
+    }
+
+    /* Orders Card */
+    .orders-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+    }
+
+    .orders-header {
+        padding: 2rem 2rem 1.5rem;
+        border-bottom: 2px solid var(--border-light);
+    }
+
+    .orders-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .orders-title i {
+        color: var(--primary-green);
+    }
+
+    .orders-subtitle {
+        font-size: 0.95rem;
+        color: var(--text-light);
+    }
+
+    /* Table */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .orders-table {
+        width: 100%;
+        margin: 0;
+    }
+
+    .orders-table thead {
+        background: #F8FAFC;
+    }
+
+    .orders-table thead th {
+        padding: 1.25rem 2rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-dark);
+        border: none;
+    }
+
+    .orders-table tbody tr {
+        border-bottom: 1px solid var(--border-light);
+        transition: all 0.3s ease;
+    }
+
+    .orders-table tbody tr:hover {
+        background: #F8FAFC;
+    }
+
+    .orders-table tbody td {
+        padding: 1.5rem 2rem;
+        color: var(--text-dark);
+        vertical-align: middle;
+        border: none;
+    }
+
+    .product-name {
+        font-weight: 700;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .product-name i {
+        color: var(--primary-green);
+        font-size: 1.25rem;
+    }
+
+    .order-date {
+        color: var(--text-light);
+        font-size: 0.95rem;
+    }
+
+    .order-quantity {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 1.05rem;
+    }
+
+    .order-total {
+        font-weight: 800;
+        color: var(--primary-green);
+        font-size: 1.25rem;
+    }
+
+    .order-total small {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    /* Status Badge */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .status-badge.delivered {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .status-badge.processing {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .status-badge.cancelled {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+    }
+
+    .empty-state-icon {
+        font-size: 5rem;
+        color: var(--border-light);
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-state-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.75rem;
+    }
+
+    .empty-state-text {
+        font-size: 1rem;
+        color: var(--text-light);
+        margin-bottom: 2rem;
+    }
+
+    .btn-shop {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        color: var(--white);
+        font-weight: 700;
+        padding: 0.875rem 2rem;
+        border: none;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-shop:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        color: var(--white);
+    }
+
+    /* Responsividade */
+    @media (max-width: 991px) {
+        .user-name {
+            font-size: 2rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 2rem 1.5rem;
+        }
+
+        .user-name {
+            font-size: 1.75rem;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .orders-table thead {
+            display: none;
+        }
+
+        .orders-table tbody tr {
+            display: block;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .orders-table tbody td {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .orders-table tbody td:last-child {
+            border-bottom: none;
+        }
+
+        .orders-table tbody td::before {
+            content: attr(data-label);
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="dashboard-header-content">
+                <div class="welcome-badge">
+                    <i class="bi bi-person-check-fill me-2"></i>
+                    Minha Conta
+                </div>
+                <h1 class="user-name">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Olá, {{ user.username }}!</span>
+                </h1>
+                <p class="user-info">
+                    <i class="bi bi-envelope me-2"></i>
+                    {{ user.email|default:"Nenhum email cadastrado" }}
+                </p>
+            </div>
         </div>
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Produto</th>
-                        <th>Data</th>
-                        <th>Qtd</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for pedido in pedidos %}
-                    <tr>
-                        <td class="ps-4 fw-bold text-success">{{ pedido.produto.nome }}</td>
-                        <td>{{ pedido.data|date:"d/m/Y" }}</td>
-                        <td>{{ pedido.quantidade }}</td>
-                        <td>R$ {{ pedido.total }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="4" class="text-center py-4 text-muted">Você ainda não fez pedidos.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-bag-check-fill"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Total de Pedidos</div>
+                    <div class="stat-value">{{ pedidos|length }}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Economia Total</div>
+                    <div class="stat-value">
+                        {% if pedidos %}
+                            {% widthratio pedidos|length 1 70 %}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-tree-fill"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">CO₂ Economizado</div>
+                    <div class="stat-value">
+                        {% if pedidos %}
+                            {% widthratio pedidos|length 1 150 %}kg
+                        {% else %}
+                            0kg
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Card -->
+        <div class="orders-card">
+            <div class="orders-header">
+                <h2 class="orders-title">
+                    <i class="bi bi-clock-history"></i>
+                    Histórico de Pedidos
+                </h2>
+                <p class="orders-subtitle">
+                    Acompanhe todos os seus pedidos realizados na EcoCycle
+                </p>
+            </div>
+
+            <div class="table-container">
+                {% if pedidos %}
+                <table class="table orders-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Data</th>
+                            <th>Quantidade</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pedido in pedidos %}
+                        <tr>
+                            <td data-label="Produto">
+                                <div class="product-name">
+                                    <i class="bi bi-box-seam"></i>
+                                    <span>{{ pedido.produto.nome }}</span>
+                                </div>
+                            </td>
+                            <td data-label="Data">
+                                <div class="order-date">
+                                    <i class="bi bi-calendar-event me-2"></i>
+                                    {{ pedido.data|date:"d/m/Y" }}
+                                </div>
+                            </td>
+                            <td data-label="Quantidade">
+                                <div class="order-quantity">
+                                    <i class="bi bi-hash me-1"></i>
+                                    {{ pedido.quantidade }} un
+                                </div>
+                            </td>
+                            <td data-label="Total">
+                                <div class="order-total">
+                                    <small>R$</small> {{ pedido.total }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-cart-x"></i>
+                    </div>
+                    <h3 class="empty-state-title">Nenhum Pedido Ainda</h3>
+                    <p class="empty-state-text">
+                        Você ainda não realizou nenhuma compra.<br>
+                        Explore nossos produtos recondicionados e faça parte da economia circular!
+                    </p>
+                    <a href="{% url 'index' %}#produtos" class="btn-shop">
+                        <i class="bi bi-grid-fill"></i>
+                        Ver Produtos
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

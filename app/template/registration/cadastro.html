@@ -2,102 +2,483 @@
 
 {% block content %}
 <style>
-    /* Fundo levemente cinza para destacar o card branco */
-    body {
-        background-color: #f8f9fa;
+    /* ============================================
+       ESTILOS ESPECÍFICOS DO CADASTRO
+       ============================================ */
+
+    /* Container de Centralização */
+    .auth-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 0;
     }
-    
-    .cadastro-card {
+
+    /* Card de Cadastro */
+    .auth-card {
+        background: var(--white);
         border: none;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        max-width: 550px;
+        width: 100%;
+    }
+
+    /* Header do Card */
+    .auth-header {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #1E293B 100%);
+        color: var(--white);
+        padding: 2.5rem 2rem 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .auth-icon {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        z-index: 2;
+    }
+
+    .auth-icon i {
+        font-size: 1.75rem;
+        color: var(--white);
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--white);
+    }
+
+    .auth-subtitle {
+        font-size: 0.95rem;
+        color: #CBD5E1;
+        margin: 0;
+    }
+
+    /* Body do Card */
+    .auth-body {
+        padding: 3rem 2rem 2rem;
+    }
+
+    /* Formulário */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .form-control {
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #F8FAFC;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.15);
+        background: var(--white);
+        outline: none;
+    }
+
+    .form-control::placeholder {
+        color: #94A3B8;
+    }
+
+    /* Input Icons */
+    .input-group {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-light);
+        font-size: 1rem;
+        z-index: 10;
+    }
+
+    .input-group .form-control {
+        padding-left: 2.75rem;
+    }
+
+    /* Help Text */
+    .helptext {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        margin-top: 0.375rem;
+        line-height: 1.5;
+        display: block;
+    }
+
+    .helptext ul {
+        margin: 0.5rem 0 0 0;
+        padding-left: 1.25rem;
+    }
+
+    .helptext li {
+        margin-bottom: 0.25rem;
+        color: var(--text-light);
+    }
+
+    /* Botão de Cadastro */
+    .btn-auth {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        color: var(--white);
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.875rem 2rem;
+        border: none;
+        border-radius: var(--radius-sm);
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 1rem;
+    }
+
+    .btn-auth:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        background: linear-gradient(135deg, var(--primary-green-hover) 0%, #047857 100%);
+    }
+
+    .btn-auth:active {
+        transform: translateY(0);
+    }
+
+    /* Alertas de Erro */
+    .alert-auth {
+        background: #FEE2E2;
+        border: none;
+        border-left: 4px solid var(--danger);
+        border-radius: var(--radius-sm);
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        color: #991B1B;
+        font-weight: 500;
+    }
+
+    .alert-auth strong {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Mensagens de Erro dos Campos */
+    .field-error {
+        color: var(--danger);
+        font-size: 0.8rem;
+        margin-top: 0.375rem;
+        display: block;
+        font-weight: 500;
+    }
+
+    .form-control.is-invalid {
+        border-color: var(--danger);
+    }
+
+    /* Footer do Card */
+    .auth-footer {
+        background: #F8FAFC;
+        padding: 1.5rem 2rem;
+        text-align: center;
+        border-top: 1px solid var(--border-light);
+    }
+
+    .auth-footer p {
+        margin: 0;
+        color: var(--text-light);
+        font-size: 0.95rem;
+    }
+
+    .auth-link {
+        color: var(--primary-green);
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .auth-link:hover {
+        color: var(--primary-green-hover);
+        text-decoration: underline;
+    }
+
+    /* Password Toggle */
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--text-light);
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 10;
+        transition: color 0.3s ease;
+    }
+
+    .password-toggle:hover {
+        color: var(--primary-green);
+    }
+
+    /* Progress Bar para Força da Senha */
+    .password-strength {
+        height: 4px;
+        background: var(--border-light);
+        border-radius: 2px;
+        margin-top: 0.5rem;
         overflow: hidden;
     }
-    
-    .cadastro-header {
-        background-color: white;
-        padding: 30px 20px 10px 20px;
-        text-align: center;
+
+    .password-strength-bar {
+        height: 100%;
+        transition: all 0.3s ease;
+        width: 0;
     }
 
-    .btn-cadastro {
-        background-color: #28a745;
-        color: white;
-        font-weight: bold;
-        padding: 12px;
-        border-radius: 6px;
-        border: none;
-        transition: background 0.3s;
-    }
-    .btn-cadastro:hover {
-        background-color: #218838;
-        color: white;
+    .password-strength-bar.weak {
+        width: 33%;
+        background: var(--danger);
     }
 
-    /* Estilização da lista de ajuda de senha do Django */
-    .helptext {
-        display: block;
-        font-size: 0.85rem;
-        color: #6c757d;
-        margin-top: 5px;
-        margin-bottom: 10px;
+    .password-strength-bar.medium {
+        width: 66%;
+        background: var(--warning);
     }
-    
-    ul {
-        padding-left: 20px;
-        font-size: 0.85rem;
-        color: #6c757d;
+
+    .password-strength-bar.strong {
+        width: 100%;
+        background: var(--primary-green);
+    }
+
+    /* Responsividade */
+    @media (max-width: 576px) {
+        .auth-container {
+            padding: 2rem 1rem;
+        }
+
+        .auth-card {
+            margin: 0 1rem;
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+        }
+
+        .auth-body {
+            padding: 3rem 1.5rem 1.5rem;
+        }
+
+        .auth-footer {
+            padding: 1.25rem 1.5rem;
+        }
     }
 </style>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            
-            <div class="card cadastro-card">
-                <div class="cadastro-header">
-                    <h3 class="fw-bold text-success">Cadastro de Usuário</h3>
-                    <p class="text-muted small">Preencha os dados abaixo para criar sua conta</p>
-                </div>
-                
-                <div class="card-body p-4 pt-2">
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        {% if form.errors %}
-                            <div class="alert alert-danger small">
-                                Por favor, corrija os erros abaixo.
-                            </div>
-                        {% endif %}
-
-                        <!-- Renderização manual dos campos para controle total -->
-                        {% for field in form %}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-secondary">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.help_text %}
-                                <div class="form-text helptext">{{ field.help_text|safe }}</div>
-                            {% endif %}
-                            {% for error in field.errors %}
-                                <div class="text-danger small">{{ error }}</div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
-
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-cadastro">Cadastrar</button>
-                        </div>
-                    </form>
-                </div>
-                
-                <div class="card-footer bg-white text-center py-3 border-0">
-                    <p class="mb-0 small">
-                        Já tem conta? <a href="{% url 'login' %}" class="text-success fw-bold text-decoration-none">Faça login</a>
-                    </p>
-                </div>
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- Header -->
+        <div class="auth-header">
+            <h1 class="auth-title">Criar Conta</h1>
+            <p class="auth-subtitle">Junte-se à nossa comunidade sustentável</p>
+            <div class="auth-icon">
+                <i class="bi bi-person-plus-fill"></i>
             </div>
+        </div>
 
+        <!-- Body -->
+        <div class="auth-body">
+            <form method="post" id="cadastroForm">
+                {% csrf_token %}
+
+                <!-- Mensagem de Erro Geral -->
+                {% if form.non_field_errors %}
+                <div class="alert-auth">
+                    <strong>Erro no cadastro</strong>
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                {% if form.errors and not form.non_field_errors %}
+                <div class="alert-auth">
+                    <strong>Corrija os erros abaixo</strong>
+                    Por favor, verifique os campos destacados.
+                </div>
+                {% endif %}
+
+                <!-- Campo Username (Nome Completo) -->
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">
+                        <i class="bi bi-person me-2"></i>{{ form.username.label }}
+                    </label>
+                    <div class="input-group">
+                        <i class="bi bi-person-fill input-icon"></i>
+                        <input
+                            type="text"
+                            name="{{ form.username.name }}"
+                            id="{{ form.username.id_for_label }}"
+                            class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                            placeholder="{{ form.username.field.widget.attrs.placeholder }}"
+                            value="{{ form.username.value|default:'' }}"
+                            autocomplete="name"
+                            required
+                            autofocus>
+                    </div>
+                    {% if form.username.help_text %}
+                        <span class="helptext">{{ form.username.help_text|safe }}</span>
+                    {% endif %}
+                    {% if form.username.errors %}
+                        <span class="field-error">{{ form.username.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo Email -->
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">
+                        <i class="bi bi-envelope me-2"></i>{{ form.email.label }}
+                    </label>
+                    <div class="input-group">
+                        <i class="bi bi-envelope-fill input-icon"></i>
+                        <input
+                            type="email"
+                            name="{{ form.email.name }}"
+                            id="{{ form.email.id_for_label }}"
+                            class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                            placeholder="{{ form.email.field.widget.attrs.placeholder }}"
+                            value="{{ form.email.value|default:'' }}"
+                            autocomplete="email"
+                            required>
+                    </div>
+                    {% if form.email.help_text %}
+                        <span class="helptext">{{ form.email.help_text|safe }}</span>
+                    {% endif %}
+                    {% if form.email.errors %}
+                        <span class="field-error">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo Senha 1 -->
+                <div class="form-group">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label">
+                        <i class="bi bi-lock me-2"></i>Senha
+                    </label>
+                    <div class="input-group">
+                        <i class="bi bi-lock-fill input-icon"></i>
+                        <input
+                            type="password"
+                            name="{{ form.password1.name }}"
+                            id="{{ form.password1.id_for_label }}"
+                            class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                            placeholder="Crie uma senha forte"
+                            autocomplete="new-password"
+                            required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('{{ form.password1.id_for_label }}', 'toggleIcon1')">
+                            <i class="bi bi-eye" id="toggleIcon1"></i>
+                        </button>
+                    </div>
+                    {% if form.password1.help_text %}
+                        <span class="helptext">{{ form.password1.help_text|safe }}</span>
+                    {% endif %}
+                    {% if form.password1.errors %}
+                        <span class="field-error">{{ form.password1.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Campo Senha 2 (Confirmação) -->
+                <div class="form-group">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label">
+                        <i class="bi bi-lock-check me-2"></i>Confirmar Senha
+                    </label>
+                    <div class="input-group">
+                        <i class="bi bi-lock-fill input-icon"></i>
+                        <input
+                            type="password"
+                            name="{{ form.password2.name }}"
+                            id="{{ form.password2.id_for_label }}"
+                            class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                            placeholder="Digite a senha novamente"
+                            autocomplete="new-password"
+                            required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('{{ form.password2.id_for_label }}', 'toggleIcon2')">
+                            <i class="bi bi-eye" id="toggleIcon2"></i>
+                        </button>
+                    </div>
+                    {% if form.password2.help_text %}
+                        <span class="helptext">{{ form.password2.help_text|safe }}</span>
+                    {% endif %}
+                    {% if form.password2.errors %}
+                        <span class="field-error">{{ form.password2.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Botão de Cadastro -->
+                <button type="submit" class="btn-auth">
+                    <i class="bi bi-person-plus me-2"></i>
+                    Criar Minha Conta
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="auth-footer">
+            <p>
+                Já tem uma conta?
+                <a href="{% url 'login' %}" class="auth-link">Faça login aqui</a>
+            </p>
         </div>
     </div>
 </div>
+
+<!-- Scripts -->
+<script>
+    // Toggle de visualização de senha
+    function togglePassword(fieldId, iconId) {
+        const passwordInput = document.getElementById(fieldId);
+        const toggleIcon = document.getElementById(iconId);
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('bi-eye');
+            toggleIcon.classList.add('bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('bi-eye-slash');
+            toggleIcon.classList.add('bi-eye');
+        }
+    }
+
+    // Adiciona animação de loading ao submeter
+    document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+        const button = this.querySelector('.btn-auth');
+        button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Criando conta...';
+        button.disabled = true;
+    });
+</script>
 {% endblock %}

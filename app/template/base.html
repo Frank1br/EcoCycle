@@ -3,123 +3,627 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeDjango</title>
+    <title>EcoCycle - Tecnologia Recondicionada com Consciência</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <style>
         :root {
-            --primary-green: #0C4B33; /* Verde Escuro do Header */
-            --accent-green: #28a745;  /* Verde Vibrante */
-        }
-        body { background-color: #f9f9f9; font-family: sans-serif; }
-        
-        /* Navbar Customizada */
-        .navbar-custom { background-color: var(--primary-green); padding: 15px 0; }
-        .navbar-brand { font-weight: bold; font-size: 1.5rem; color: white !important; }
-        .nav-link { color: rgba(255,255,255,0.8) !important; margin-right: 15px; transition: color 0.3s; }
-        .nav-link:hover { color: white !important; }
-        
-        /* Botão Login (Visitante) */
-        .btn-login { 
-            background-color: var(--accent-green); 
-            color: white; 
-            font-weight: bold; 
-            border: none; 
-            padding: 8px 25px; 
-            border-radius: 5px;
-        }
-        .btn-login:hover { background-color: #218838; color: white; }
+            /* ============================================
+               PALETA DE CORES ECO-TECH
+               ============================================ */
+            --primary-dark: #0F172A;      /* Azul Slate Profundo - Tech/Confiança */
+            --primary-green: #10B981;     /* Verde Esmeralda - Sustentabilidade/Ação */
+            --primary-green-hover: #059669; /* Verde Escuro para Hover */
+            --secondary-bg: #E2E8F0;      /* Cinza Azulado Claro - Fundo */
+            --text-dark: #1E293B;         /* Cinza Escuro - Texto Principal */
+            --text-light: #64748B;        /* Cinza Médio - Texto Secundário */
+            --white: #FFFFFF;             /* Branco Puro - Cards/Seções */
+            --border-light: #CBD5E1;      /* Borda Suave */
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
 
-        /* Botão Perfil (Logado) */
-        .btn-perfil {
-            background-color: var(--accent-green);
-            color: white;
-            font-weight: bold;
-            padding: 8px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-        .btn-perfil:hover { background-color: #218838; color: white; }
+            /* ============================================
+               SOMBRAS E EFEITOS
+               ============================================ */
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
+            --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.15);
+            --shadow-hover: 0 8px 24px rgba(15, 23, 42, 0.12);
 
-        /* Botão Logout (Logado) */
-        .btn-logout {
-            background-color: #dc3545; /* Vermelho */
-            color: white;
-            font-weight: bold;
-            padding: 8px 20px;
-            border-radius: 5px;
+            /* ============================================
+               ESPAÇAMENTOS
+               ============================================ */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2.5rem;
+            --spacing-xl: 4rem;
+
+            /* ============================================
+               BORDAS ARREDONDADAS
+               ============================================ */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        /* ============================================
+           ESTILOS GLOBAIS
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: var(--secondary-bg);
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ============================================
+           TIPOGRAFIA
+           ============================================ */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        /* ============================================
+           NAVBAR - DESIGN MODERNO ECO-TECH
+           ============================================ */
+        .navbar-custom {
+            background-color: var(--primary-dark);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-custom.scrolled {
+            padding: 0.75rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.75rem;
+            color: var(--white) !important;
+            letter-spacing: -0.5px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand i {
+            font-size: 2rem;
+            color: var(--primary-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-link {
+            color: #CBD5E1 !important;
+            margin: 0 0.75rem;
+            padding: 0.5rem 1rem !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-green);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-green) !important;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Botões da Navbar */
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+            color: var(--white);
+            font-weight: 700;
             border: none;
+            padding: 0.625rem 2rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
-        .btn-logout:hover { background-color: #c82333; color: white; }
 
-        /* Footer Customizado */
-        footer { background-color: #000; color: white; padding: 20px 0; font-size: 0.9rem; }
+        .btn-login:hover {
+            background: linear-gradient(135deg, var(--primary-green-hover) 0%, #047857 100%);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-perfil {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-perfil:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background-color: transparent;
+            border: 2px solid var(--danger);
+            color: var(--danger);
+            font-weight: 700;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: var(--danger);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Navbar Toggler */
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* ============================================
+           CONTEÚDO PRINCIPAL
+           ============================================ */
+        .main-content {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* ============================================
+           ALERTAS/MENSAGENS
+           ============================================ */
+        .alert {
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-success {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .alert-danger {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border-left: 4px solid var(--danger);
+        }
+
+        .alert-warning {
+            background-color: #FEF3C7;
+            color: #92400E;
+            border-left: 4px solid var(--warning);
+        }
+
+        /* ============================================
+           FOOTER - PROFISSIONAL E MODERNO
+           ============================================ */
+        footer {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #94A3B8;
+            padding: 3rem 0 1.5rem;
+            margin-top: auto;
+            width: 100%;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            padding-bottom: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h5 {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: #94A3B8;
+            text-decoration: none;
+            display: block;
+            padding: 0.375rem 0;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-green);
+            padding-left: 0.5rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748B;
+        }
+
+        .footer-bottom .eco-badge {
+            color: var(--primary-green);
+            font-weight: 700;
+        }
+
+        /* ============================================
+           RESPONSIVIDADE
+           ============================================ */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background-color: rgba(15, 23, 42, 0.98);
+                padding: 1.5rem;
+                margin-top: 1rem;
+                border-radius: var(--radius-md);
+            }
+
+            .nav-link {
+                margin: 0.25rem 0;
+            }
+
+            .btn-perfil, .btn-logout {
+                width: 100%;
+                margin: 0.5rem 0;
+                justify-content: center;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.25rem; }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-custom">
+    <!-- ============================================
+         NAVBAR - NAVEGAÇÃO PRINCIPAL
+         ============================================ -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">
-                <i class="bi bi-geo-alt-fill text-success"></i> CodeDjango
+            <!-- Logo/Brand -->
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'index' %}">
+                {% if site_config.logo_do_site %}
+                    <img src="{{ site_config.logo_do_site.url }}" alt="{{ site_config.nome_do_site }}" height="45" class="d-inline-block">
+                    <span>{{ site_config.nome_do_site }}</span>
+                {% else %}
+                    <i class="bi bi-recycle"></i>
+                    <span>EcoCycle</span>
+                {% endif %}
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+            <!-- Toggler para Mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Links de Navegação -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <!-- Links Comuns -->
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#sobre">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#produtos">Produtos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#contato">Contato</a></li>
-                    
-                    <!-- Lógica de Login/Logout -->
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}#sobre">
+                            <i class="bi bi-info-circle me-1"></i> Sobre
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}#produtos">
+                            <i class="bi bi-grid me-1"></i> Produtos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}#contato">
+                            <i class="bi bi-envelope me-1"></i> Contato
+                        </a>
+                    </li>
+
+                    <!-- Área de Autenticação -->
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
+                        <li class="nav-item mt-3 mt-lg-0">
                             <a class="btn-perfil" href="{% url 'perfil' %}">
-                                Perfil ({{ user.username }})
+                                <i class="bi bi-person-circle"></i>
+                                <span>{{ user.username }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <form action="{% url 'logout' %}" method="post" class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn-logout">Logout</button>
+                                <button type="submit" class="btn-logout">
+                                    <i class="bi bi-box-arrow-right me-1"></i> Sair
+                                </button>
                             </form>
                         </li>
                     {% else %}
-                        <li class="nav-item"><a class="btn btn-login" href="{% url 'login' %}">Login</a></li>
+                        <li class="nav-item mt-3 mt-lg-0">
+                            <a class="btn btn-login" href="{% url 'login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Conteúdo -->
-    <div style="min-height: 80vh;">
+    <!-- ============================================
+         CONTEÚDO PRINCIPAL
+         ============================================ -->
+    <div class="main-content">
+        <!-- Mensagens do Sistema -->
         {% if messages %}
-            <div class="container mt-3">
+            <div class="container mt-4">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <div class="d-flex align-items-center">
+                            {% if message.tags == 'success' %}
+                                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                            {% elif message.tags == 'danger' or message.tags == 'error' %}
+                                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                            {% else %}
+                                <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                            {% endif %}
+                            <div>{{ message }}</div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
-        
+
+        <!-- Conteúdo das Páginas -->
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center mt-5">
+    <!-- ============================================
+         FOOTER - RODAPÉ PROFISSIONAL
+         ============================================ -->
+    <footer>
         <div class="container">
-            <p class="mb-0">&copy; 2025 CodeDjango. Todos os direitos reservados.</p>
+            <!-- Conteúdo Principal do Footer -->
+            <div class="footer-content">
+                <div class="row g-4">
+                    <!-- Coluna 1: Sobre -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-section">
+                            <h5>
+                                <i class="bi bi-recycle me-2" style="color: var(--primary-green);"></i>
+                                EcoCycle
+                            </h5>
+                            <p class="mb-3" style="line-height: 1.7;">
+                                Tecnologia premium recondicionada com garantia e consciência ambiental.
+                                Reduzindo o lixo eletrônico, um dispositivo por vez.
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="https://www.instagram.com/dev_frank1br?igsh=MWRpYndzOTF6ODFlMg==" class="social-icon" aria-label="Instagram" target="_blank">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                                
+                                <a href="https://www.linkedin.com/in/frank-oliveira-2a7134254/" class="social-icon" aria-label="LinkedIn" target="_blank">
+                                    <i class="bi bi-linkedin"></i>
+                                </a>
+                                <a href="https://wa.me/5513981733254?text=Ol%C3%A1%2C%20vim%20pelo%20site%20EcoCycle%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20eletr%C3%B4nicos%20recondicionados%21%20%F0%9F%8C%B1" class="social-icon" aria-label="WhatsApp" target="_blank">
+                                    <i class="bi bi-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 2: Links Rápidos -->
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-section">
+                            <h5>Links Rápidos</h5>
+                            <a href="{% url 'index' %}" class="footer-link">Home</a>
+                            <a href="{% url 'index' %}#sobre" class="footer-link">Sobre Nós</a>
+                            <a href="{% url 'index' %}#produtos" class="footer-link">Produtos</a>
+                            <a href="{% url 'index' %}#contato" class="footer-link">Contato</a>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 3: Suporte -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-section">
+                            <h5>Suporte</h5>
+                            <a href="#" class="footer-link">
+                                <i class="bi bi-shield-check me-2"></i>Garantia
+                            </a>
+                            <a href="#" class="footer-link">
+                                <i class="bi bi-truck me-2"></i>Política de Envio
+                            </a>
+                            <a href="#" class="footer-link">
+                                <i class="bi bi-arrow-return-left me-2"></i>Trocas e Devoluções
+                            </a>
+                            <a href="#" class="footer-link">
+                                <i class="bi bi-question-circle me-2"></i>FAQ
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 4: Contato -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-section">
+                            <h5>Contato</h5>
+                            <p class="mb-2">
+                                <i class="bi bi-geo-alt-fill me-2" style="color: var(--primary-green);"></i>
+                                São Vicente, Brasil
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-envelope-fill me-2" style="color: var(--primary-green);"></i>
+                                contato@ecocycle.com.br
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-phone-fill me-2" style="color: var(--primary-green);"></i>
+                                (13) 98173-3254
+                            </p>
+                            <p class="mb-0">
+                                <i class="bi bi-clock-fill me-2" style="color: var(--primary-green);"></i>
+                                Seg-Sex: 9h-18h
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>
+                    &copy; 2025 <span class="eco-badge">EcoCycle</span>. Todos os direitos reservados.
+                    <span style="color: var(--primary-green);">|</span>
+                    Tecnologia com consciência.
+                </p>
+            </div>
         </div>
     </footer>
 
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para animação da navbar no scroll -->
+    <script>
+        // Adiciona classe ao scrollar
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('mainNav');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Fecha o menu mobile ao clicar em um link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                if (navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                    bsCollapse.hide();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

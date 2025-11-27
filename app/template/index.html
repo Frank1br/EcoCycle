@@ -2,138 +2,713 @@
 
 {% block content %}
 <style>
-    /* Estilos Específicos da Index */
+    /* ============================================
+       ESTILOS ESPECÍFICOS DA INDEX (LANDING PAGE)
+       ============================================ */
+
+    /* ============================================
+       HERO SECTION - IMPACTO VISUAL MÁXIMO
+       ============================================ */
     .hero-section {
-        background-color: #0C4B33; /* Cor de fundo caso não tenha imagem */
         position: relative;
-        padding: 80px 0;
+        min-height: 600px;
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0C4A6E 100%);
+        display: flex;
+        align-items: center;
         overflow: hidden;
-        /* Se quiser imagem de fundo no banner todo: */
-        {% if pagina.banner_background %}
-        background-image: url('{{ pagina.banner_background.url }}');
-        background-size: cover;
-        background-position: center;
-        {% endif %}
+        padding: 4rem 0;
     }
-    /* Caixa verde do texto no banner */
-    .hero-box {
-        background-color: #28a745; /* Verde claro */
-        padding: 40px;
-        border-radius: 10px;
-        color: white;
-        max-width: 500px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+    /* Overlay para legibilidade */
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
+        z-index: 1;
+    }
+
+    /* Pattern decorativo de fundo */
+    .hero-pattern {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        opacity: 0.05;
+        background-image:
+            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(16, 185, 129, 0.3) 35px, rgba(16, 185, 129, 0.3) 70px);
+        z-index: 1;
+    }
+
+    .hero-content {
         position: relative;
         z-index: 2;
     }
-    /* Elementos decorativos do fundo */
-    .hero-decoration {
-        position: absolute;
-        right: 0; top: 0; height: 100%; width: 60%;
-        background-size: contain;
-        opacity: 0.1;
-        pointer-events: none;
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
-    
-    .section-title { color: #28a745; font-weight: bold; margin-bottom: 1rem; }
-    
-    .card-custom { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); background: white; padding: 20px; }
-    
-    .product-card { border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 10px; transition: transform 0.2s; background: white; }
-    .product-card:hover { transform: translateY(-5px); }
-    .product-card img { height: 180px; object-fit: contain; padding: 10px; }
-    .btn-buy { background-color: #28a745; color: white; border: none; width: 100%; font-weight: bold; }
-    .btn-buy:hover { background-color: #218838; color: white; }
+
+    .hero-subtitle {
+        font-size: 1.35rem;
+        color: #CBD5E1;
+        margin-bottom: 2rem;
+        line-height: 1.7;
+        font-weight: 400;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--primary-green);
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: 2px solid rgba(16, 185, 129, 0.3);
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-hero-primary {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        color: var(--white);
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 1rem 2.5rem;
+        border: none;
+        border-radius: var(--radius-md);
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-hero-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5);
+        color: var(--white);
+    }
+
+    .btn-hero-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 1rem 2.5rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: var(--radius-md);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin-left: 1rem;
+    }
+
+    .btn-hero-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+        transform: translateY(-3px);
+    }
+
+    /* ============================================
+       SECTION TITLE COMPONENT
+       ============================================ */
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-badge {
+        display: inline-block;
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--primary-green);
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+        font-size: 1.15rem;
+        color: var(--text-light);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* ============================================
+       CARDS MODERNOS COM HOVER EFFECTS
+       ============================================ */
+    .card-eco {
+        background: var(--white);
+        border: none;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .card-eco:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    /* ============================================
+       BENEFITS SECTION (SOBRE)
+       ============================================ */
+    .benefit-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: var(--white);
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .benefit-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.75rem;
+    }
+
+    .benefit-text {
+        color: var(--text-light);
+        line-height: 1.7;
+    }
+
+    /* ============================================
+       PRODUCT CARDS - VITRINE
+       ============================================ */
+    .product-card {
+        background: var(--white);
+        border: none;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .product-image-wrapper {
+        position: relative;
+        height: 250px;
+        background: #F8FAFC;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 1.5rem;
+    }
+
+    .product-image-wrapper img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
+
+    .product-card:hover .product-image-wrapper img {
+        transform: scale(1.1);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        color: var(--white);
+        padding: 0.375rem 0.875rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .product-body {
+        padding: 1.75rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.75rem;
+    }
+
+    .product-description {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        flex: 1;
+    }
+
+    .product-price {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-green);
+        margin-bottom: 1.25rem;
+    }
+
+    .product-price small {
+        font-size: 1rem;
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    .btn-product {
+        background: var(--primary-green);
+        color: var(--white);
+        font-weight: 700;
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+    }
+
+    .btn-product:hover {
+        background: var(--primary-green-hover);
+        color: var(--white);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    /* ============================================
+       CONTACT SECTION
+       ============================================ */
+    .contact-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .map-wrapper {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 1.5rem;
+        height: 300px;
+    }
+
+    .contact-info-item {
+        display: flex;
+        align-items: start;
+        margin-bottom: 1.25rem;
+        padding: 1rem;
+        background: #F8FAFC;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+    }
+
+    .contact-info-item:hover {
+        background: rgba(16, 185, 129, 0.05);
+        transform: translateX(5px);
+    }
+
+    .contact-info-item i {
+        font-size: 1.5rem;
+        color: var(--primary-green);
+        margin-right: 1rem;
+        margin-top: 0.25rem;
+    }
+
+    .contact-form .form-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-form .form-control {
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .contact-form .form-control:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.15);
+    }
+
+    .btn-contact {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+        color: var(--white);
+        font-weight: 700;
+        padding: 0.875rem 2rem;
+        border: none;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-contact:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* ============================================
+       RESPONSIVIDADE
+       ============================================ */
+    @media (max-width: 991px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+        }
+
+        .btn-hero-secondary {
+            margin-left: 0;
+            margin-top: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .btn-hero-primary, .btn-hero-secondary {
+            width: 100%;
+            margin-left: 0;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+        }
+    }
 </style>
 
 {% if pagina %}
-<!-- Banner Hero -->
-<div class="hero-section">
-    <div class="hero-decoration"></div>
+<!-- ============================================
+     HERO SECTION - BANNER PRINCIPAL
+     ============================================ -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-pattern"></div>
+
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="hero-box">
-                    <p class="lead fw-bold">{{ pagina.texto_chamada }}</p>
-                    <a href="{% url 'cadastro' %}" class="btn btn-light text-success fw-bold px-4 mt-3">Cadastrar</a>
+            <div class="col-lg-7 hero-content">
+                <div class="hero-badge">
+                    <i class="bi bi-award-fill me-2"></i>
+                    Tecnologia Certificada e Recondicionada
+                </div>
+
+                <h1 class="hero-title">
+                    {{ pagina.texto_chamada|default:"Tecnologia Premium. Preço Justo. Planeta Agradecido." }}
+                </h1>
+
+                <p class="hero-subtitle">
+                    Dispositivos eletrônicos de alta qualidade, recondicionados com garantia total.
+                    Economize até 70% e ajude a reduzir o lixo eletrônico.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    {% if user.is_authenticated %}
+                        <a href="#produtos" class="btn-hero-primary">
+                            <i class="bi bi-grid-fill me-2"></i>
+                            Ver Produtos
+                        </a>
+                        <a href="{% url 'perfil' %}" class="btn-hero-secondary">
+                            <i class="bi bi-person-circle me-2"></i>
+                            Meu Perfil
+                        </a>
+                    {% else %}
+                        <a href="{% url 'cadastro' %}" class="btn-hero-primary">
+                            <i class="bi bi-cart-check-fill me-2"></i>
+                            Começar Agora
+                        </a>
+                        <a href="#produtos" class="btn-hero-secondary">
+                            <i class="bi bi-grid-fill me-2"></i>
+                            Ver Produtos
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <div class="container py-5">
-    <!-- Sobre Nós -->
-    <div id="sobre" class="card-custom mb-5">
-        <div class="row align-items-center">
-            <div class="col-md-6 p-4">
-                <h3 class="section-title">Sobre nós</h3>
-                <p class="text-muted">{{ pagina.texto_sobre }}</p>
+    <!-- ============================================
+         SOBRE NÓS - BENEFÍCIOS
+         ============================================ -->
+    <section id="sobre" class="py-5">
+        <div class="section-header">
+            <span class="section-badge">
+                <i class="bi bi-award me-2"></i>Por Que Escolher EcoCycle
+            </span>
+            <h2 class="section-title">Tecnologia com Consciência</h2>
+            <p class="section-subtitle">
+                Oferecemos eletrônicos recondicionados de alta qualidade com garantia,
+                preço justo e impacto ambiental positivo.
+            </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card-eco text-center">
+                    <div class="benefit-icon mx-auto">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="benefit-title">Garantia Total</h3>
+                    <p class="benefit-text">
+                        Todos os produtos passam por rigoroso teste de qualidade
+                        e vêm com garantia de 12 meses.
+                    </p>
+                </div>
             </div>
-            <div class="col-md-6 text-center">
+
+            <div class="col-md-4">
+                <div class="card-eco text-center">
+                    <div class="benefit-icon mx-auto">
+                        <i class="bi bi-piggy-bank"></i>
+                    </div>
+                    <h3 class="benefit-title">Economia Real</h3>
+                    <p class="benefit-text">
+                        Economize até 70% em relação ao preço de produtos novos,
+                        sem abrir mão da qualidade.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-eco text-center">
+                    <div class="benefit-icon mx-auto">
+                        <i class="bi bi-recycle"></i>
+                    </div>
+                    <h3 class="benefit-title">Sustentabilidade</h3>
+                    <p class="benefit-text">
+                        Cada compra evita descarte de eletrônicos e reduz
+                        emissões de CO₂ em até 150kg.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% if pagina.texto_sobre %}
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <h3 class="mb-4" style="color: var(--text-dark); font-weight: 700;">Sobre Nós</h3>
+                <p style="color: var(--text-light); line-height: 1.8; font-size: 1.05rem;">
+                    {{ pagina.texto_sobre }}
+                </p>
+            </div>
+            <div class="col-lg-6 text-center">
                 {% if pagina.imagem_sobre %}
-                    <img src="{{ pagina.imagem_sobre.url }}" class="img-fluid rounded" alt="Sobre nós" style="max-height: 300px;">
+                    <img src="{{ pagina.imagem_sobre.url }}"
+                         class="img-fluid rounded-4 shadow-lg"
+                         alt="Sobre EcoCycle"
+                         style="max-height: 400px; object-fit: cover;">
                 {% else %}
-                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 250px; color: #ccc;">Imagem Sobre</div>
+                    <div class="bg-light rounded-4 d-flex align-items-center justify-content-center"
+                         style="height: 350px; color: #CBD5E1;">
+                        <i class="bi bi-image" style="font-size: 4rem;"></i>
+                    </div>
                 {% endif %}
             </div>
         </div>
-    </div>
+        {% endif %}
+    </section>
 
-    <!-- Produtos -->
-    <h3 id="produtos" class="section-title mb-4">Produtos</h3>
-    <div class="row mb-5">
-        {% for produto in produtos %}
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card product-card h-100 p-2">
-                {% if produto.foto %}
-                <img src="{{ produto.foto.url }}" class="card-img-top" alt="{{ produto.nome }}">
-                {% endif %}
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">{{ produto.nome }}</h5>
-                    <p class="card-text small text-muted">{{ produto.descricao|truncatechars:50 }}</p>
-                    <h5 class="my-3">Preço: R$ {{ produto.preco }}</h5>
-                    <a href="{% url 'comprar' produto.id %}" class="btn btn-buy">Comprar</a>
+    <!-- ============================================
+         PRODUTOS - VITRINE
+         ============================================ -->
+    <section id="produtos" class="py-5">
+        <div class="section-header">
+            <span class="section-badge">
+                <i class="bi bi-grid me-2"></i>Nossos Produtos
+            </span>
+            <h2 class="section-title">Tecnologia Recondicionada Premium</h2>
+            <p class="section-subtitle">
+                Explore nossa seleção de eletrônicos certificados, testados e com garantia.
+            </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            {% for produto in produtos %}
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <span class="product-badge">
+                            <i class="bi bi-recycle me-1"></i>Eco
+                        </span>
+                        {% if produto.foto %}
+                            <img src="{{ produto.foto.url }}" alt="{{ produto.nome }}">
+                        {% else %}
+                            <i class="bi bi-laptop" style="font-size: 5rem; color: #CBD5E1;"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-body">
+                        <h3 class="product-title">{{ produto.nome }}</h3>
+                        <p class="product-description">
+                            {{ produto.descricao|truncatechars:80 }}
+                        </p>
+
+                        <div class="product-price">
+                            <small>R$</small> {{ produto.preco }}
+                        </div>
+
+                        <a href="{% url 'comprar' produto.id %}" class="btn-product">
+                            <i class="bi bi-cart-plus me-2"></i>Ver Detalhes
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-inbox" style="font-size: 4rem; color: var(--border-light);"></i>
+                <p class="mt-3 text-muted">Nenhum produto disponível no momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ============================================
+         CONTATO
+         ============================================ -->
+    <section id="contato" class="py-5">
+        <div class="section-header">
+            <span class="section-badge">
+                <i class="bi bi-envelope me-2"></i>Fale Conosco
+            </span>
+            <h2 class="section-title">Entre em Contato</h2>
+            <p class="section-subtitle">
+                Tem dúvidas? Nossa equipe está pronta para ajudar você.
+            </p>
+        </div>
+
+        <div class="contact-card">
+            <div class="row g-5">
+                <!-- Coluna Esquerda: Mapa e Informações -->
+                <div class="col-lg-5">
+                    <h4 class="mb-4" style="color: var(--text-dark); font-weight: 700;">
+                        Informações de Contato
+                    </h4>
+
+                    <!-- Mapa Google -->
+                    <div class="map-wrapper">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            frameborder="0"
+                            style="border:0"
+                            src="https://maps.google.com/maps?q={{ pagina.endereco|urlencode }}&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <div>
+                            <strong style="color: var(--text-dark);">Endereço</strong>
+                            <p class="mb-0" style="color: var(--text-light);">{{ pagina.endereco }}</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <i class="bi bi-whatsapp"></i>
+                        <div>
+                            <strong style="color: var(--text-dark);">WhatsApp</strong>
+                            <p class="mb-0" style="color: var(--text-light);">{{ pagina.whatsapp }}</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <i class="bi bi-envelope-fill"></i>
+                        <div>
+                            <strong style="color: var(--text-dark);">Email</strong>
+                            <p class="mb-0" style="color: var(--text-light);">{{ pagina.email }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Formulário -->
+                <div class="col-lg-7">
+                    <h4 class="mb-4" style="color: var(--text-dark); font-weight: 700;">
+                        Envie uma Mensagem
+                    </h4>
+
+                    <form method="post" class="contact-form">
+                        {% csrf_token %}
+
+                        {% for field in form_contato %}
+                        <div class="mb-4">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn-contact w-100">
+                            <i class="bi bi-send-fill me-2"></i>Enviar Mensagem
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <div class="col-12 text-center"><p>Nenhum produto cadastrado.</p></div>
-        {% endfor %}
-    </div>
-
-    <!-- Contato -->
-    <div id="contato" class="card-custom">
-        <div class="row">
-            <div class="col-md-6 border-end">
-                <h3 class="section-title">Contato</h3>
-                
-                <!-- MAPA GOOGLE REAL (Embed Iframe) -->
-                <div class="mb-3 rounded overflow-hidden shadow-sm" style="height: 250px;">
-                    <iframe 
-                        width="100%" 
-                        height="100%" 
-                        frameborder="0" 
-                        style="border:0" 
-                        src="https://maps.google.com/maps?q={{ pagina.endereco|urlencode }}&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-
-                <p class="mb-1"><strong>Endereço:</strong> {{ pagina.endereco }}</p>
-                <p class="mb-1"><strong>WhatsApp:</strong> {{ pagina.whatsapp }}</p>
-                <p><strong>Email:</strong> {{ pagina.email }}</p>
-            </div>
-            <div class="col-md-6 ps-md-5">
-                <h3 class="section-title">Envie uma mensagem</h3>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form_contato.as_p }}
-                    <button type="submit" class="btn btn-outline-success w-100 mt-2">Enviar</button>
-                </form>
-            </div>
-        </div>
-    </div>
+    </section>
 </div>
 {% endif %}
 {% endblock %}
