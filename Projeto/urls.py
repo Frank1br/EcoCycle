@@ -1,114 +1,39 @@
-import os
-from pathlib import Path
+from django.contrib import admin
+from django.urls import path, re_path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.views.static import serve
+from django.contrib.auth import views as auth_views
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Importamos apenas as views, que é o padrão seguro
+from app import views
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u6$!ua-)@i#xfn)myjq+=fuv#w4!=ysv^th+0cz#=&p*!f%)gu'
+# Definimos o formulário de login DIRETAMENTE na view personalizada se precisarmos,
+# ou usamos um truque para não importar o forms.py aqui.
+# Mas a melhor forma é mover a lógica do 'authentication_form' para dentro do views.py
+# ou usar a view padrão e deixar o template cuidar do resto.
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Vamos usar a view de login padrão, mas apontando para o template correto.
+# O formulário personalizado (com placeholders) já deve ser usado automaticamente
+# se configurarmos corretamente ou se passarmos na view.
 
-ALLOWED_HOSTS = ['*'] # Permite qualquer host (útil para desenvolvimento e testes iniciais)
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    
+    # Rotas do App
+    path('', views.index, name='index'),
+    path('cadastro/', views.cadastro, name='cadastro'),
+    path('comprar/<int:produto_id>/', views.comprar, name='comprar'),
+    path('perfil/', views.perfil, name='perfil'),
+    
+    # Login: Usando a view que criaremos no app/views.py para evitar circular import
+    path('login/', views.site_login, name='login'),
+    
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
-# ADICIONE ESTA LINHA: Configuração de confiança CSRF para o Fly.io
-CSRF_TRUSTED_ORIGINS = ['https://ecocycle.fly.dev']
-
-# Application definition
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'app', # Seu app aqui
+    # Rota para média em produção
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Adicionado WhiteNoise para servir estáticos em produção
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-ROOT_URLCONF = 'Projeto.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # AQUI ESTÁ O SEGREDO: Apontamos para 'app/template' explicitamente
-        'DIRS': [os.path.join(BASE_DIR, 'app', 'template')], 
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'app.context_processors.dados_do_site', # Context Processor para dados globais
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = 'Projeto.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# Configuração Padrão (Funciona no seu Mac)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# Configuração para o Fly.io
-# Se a pasta '/data' existir (só existe no servidor), usa ela.
-if os.path.exists('/data'):
-    DATABASES['default']['NAME'] = os.path.join('/data', 'db.sqlite3')
-
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
-]
-
-# Internationalization
-LANGUAGE_CODE = 'pt-br'
-TIME_ZONE = 'America/Sao_Paulo'
-USE_I18N = True
-USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Pasta onde o collectstatic vai reunir os arquivos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # Otimização do WhiteNoise
-
-# --- CORREÇÃO AQUI: Configuração de Mídia (Uploads) ---
-MEDIA_URL = '/media/'
-
-# Lógica Inteligente para Persistência
-if os.path.exists('/data'):
-    # Se a pasta /data existe (estamos no Fly.io), salvamos as imagens lá!
-    # Assim elas ficam salvas no Volume Persistente e não somem.
-    MEDIA_ROOT = os.path.join('/data', 'media')
-else:
-    # Se estamos no computador local, salvamos na pasta do projeto.
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Redirecionamento após login/logout
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
-LOGIN_URL = 'login'
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
