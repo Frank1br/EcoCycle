@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-u6$!ua-)@i#xfn)myjq+=fuv#w4!=ysv^th+0cz#=&p*!f%)gu
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] # Permite qualquer host (útil para desenvolvimento e testes iniciais)
-
+CSRF_TRUSTED_ORIGINS = ['https://ecocycle.fly.dev']
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
