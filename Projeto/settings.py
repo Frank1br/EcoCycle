@@ -1,17 +1,16 @@
 import os
 from pathlib import Path
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-u6$!ua-)@i#xfn)myjq+=fuv#w4!=ysv^th+0cz#=&p*!f%)gu')
+SECRET_KEY = 'django-insecure-u6$!ua-)@i#xfn)myjq+=fuv#w4!=ysv^th+0cz#=&p*!f%)gu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['*'] # Permite qualquer host (útil para desenvolvimento e testes iniciais)
 
 # Application definition
 INSTALLED_APPS = [
@@ -26,12 +25,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise for static files
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Adicionado WhiteNoise para servir estáticos em produção
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'app.middleware.SeparateAdminAuthMiddleware',  # Middleware customizado para separar sessões admin/site
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -50,6 +48,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.dados_do_site', # Context Processor para dados globais
             ],
         },
     },
@@ -58,13 +57,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Projeto.wsgi.application'
 
 # Database
-# Use PostgreSQL in production (via DATABASE_URL env var), SQLite in development
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+# Configuração Padrão (Funciona no seu Mac)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/data/db.sqlite3', 
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Configuração para o Fly.io
+# Se a pasta '/data' existir (só existe no servidor), usa ela.
+if os.path.exists('/data'):
+    DATABASES['default']['NAME'] = os.path.join('/data', 'db.sqlite3')
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -82,20 +88,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app', 'static'),
-]
-
-# Enable WhiteNoise's GZip and Brotli compression
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Pasta onde o collectstatic vai reunir os arquivos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # Otimização do WhiteNoise
 
 # Configuração de Mídia (Uploads)
 MEDIA_URL = '/media/'
@@ -107,10 +101,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://ecocycle.fly.dev",
-]
-
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
