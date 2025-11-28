@@ -93,7 +93,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
 
 # Configuração de Mídia (Uploads)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Em produção (Fly.io), salva mídia no volume persistente /data
+# Em desenvolvimento, usa a pasta media local
+if os.path.exists('/data'):
+    MEDIA_ROOT = '/data/media'
+else:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

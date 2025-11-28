@@ -55,6 +55,6 @@ USER root
 ENV PORT=8000
 EXPOSE 8000
 
-# Run database migrations and start the applicati
-# Mantém o container vivo sem rodar nada, para podermos entrar via SSH
-CMD sh -c "/opt/venv/bin/python manage.py migrate && /opt/venv/bin/gunicorn --bind 0.0.0.0:8000 --workers 2 --threads 2 --timeout 120 Projeto.wsgi:application"
+# Run database migrations and start the application
+# Cria diretórios de mídia no volume persistente se não existirem
+CMD sh -c "mkdir -p /data/media/produtos /data/media/site && /opt/venv/bin/python manage.py migrate && /opt/venv/bin/gunicorn --bind 0.0.0.0:8000 --workers 2 --threads 2 --timeout 120 Projeto.wsgi:application"
